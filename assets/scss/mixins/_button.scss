@@ -1,0 +1,20 @@
+@mixin button($bg,$text_color: white) {
+  padding: 10px;
+  border: none;
+  background: $bg;
+  color: $text_color;
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  &:hover {
+    background:darken($bg,10%);
+    transition: all 0.3s ease;
+  }
+  &:active {
+    background:darken($bg,20%);
+    transition: none;
+  }
+  &:disabled{
+    background: darkgray;
+  }
+}
