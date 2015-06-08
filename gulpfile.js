@@ -27,41 +27,41 @@ var banner = [
 
 
 gulp.task('css', function() {
-    gulp.src('./assets/scss/style.scss')
+    gulp.src('assets/scss/style.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({errLogToConsole: true}))
         .pipe(myth())
         .pipe(csso())
         .pipe(header(banner, {package: package}))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./public/css/'))
+        .pipe(gulp.dest('public/css/'))
         .pipe(browserSync.reload({
             stream: true
         }));
 });
 
 gulp.task('js', function() {
-  gulp.src(['./assets/js/states/*.js', './assets/js/entities/*.js', './assets/js/helpers/*.js', './assets/js/app.js'])
+  gulp.src(['assets/js/libs.js', 'assets/js/states/*.js', 'assets/js/entities/*.js', 'assets/js/helpers/*.js', 'assets/js/app.js'])
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
     .pipe(uglify())
     .pipe(header(banner, {package: package}))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('./public/js/'));
+    .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('bower', function() {
     gulp.src(mainBowerFiles())
         .pipe(concat('libs.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('./public/js/'));
+        .pipe(gulp.dest('assets/js/'));
 });
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;
 gulp.task('nodemon', function(cb) {
     var called = false;
     return nodemon({
-            script: './app.js',
+            script: 'app.js',
             ignore: ['assets/', 'public/', 'node_modules/']
         })
         .on('start', function onStart() {
@@ -95,7 +95,7 @@ gulp.task('bs-reload', function () {
 
 gulp.task('default', ['browser-sync', 'bower', 'css', 'js'],
     function() {
-        gulp.watch("./assets/scss/**/*.scss", ['css']);
-        gulp.watch("./assets/js/**/*.js", ['js', 'bs-reload']);
+        gulp.watch("assets/scss/**/*.scss", ['css']);
+        gulp.watch("assets/js/**/*.js", ['js', 'bs-reload']);
     }
 );
