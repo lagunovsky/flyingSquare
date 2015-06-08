@@ -1,6 +1,6 @@
 # FlyingSquare
 Multiplayer runner game. 
-Created with ❤, NodeJS, Gulp and Phaser HTML5 game framework.
+Created with ❤, NodeJS, Gulp and Phaser.
 
 Start game server 
 <code>node app.js</code>
