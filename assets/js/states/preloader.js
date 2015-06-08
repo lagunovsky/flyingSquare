@@ -9,9 +9,9 @@ Game.Preloader.prototype = {
             fill: '#333'
         });
         loadingLabel.anchor.setTo(0.5, 0.5);
-        this.load.audio( 'menu-music', [ 'assets/audio/menu.mp3', 'assets/audio/menu.ogg' ] );
-        this.load.audio( 'background-music', ['assets/audio/background.mp3', 'assets/audio/background.ogg' ] );
-        this.load.audio( 'explosion', ['assets/audio/explosion.mp3', 'assets/audio/explosion.ogg' ] );
+        this.load.audio( 'menu-music', [ '/audio/menu.mp3', '/audio/menu.ogg' ] );
+        this.load.audio( 'background-music', ['/audio/background.mp3', '/audio/background.ogg' ] );
+        this.load.audio( 'explosion', ['/audio/explosion.mp3', '/audio/explosion.ogg' ] );
 
         var square = this.add.bitmapData( 20, 20 );
 	    square.context.fillStyle = '#333';

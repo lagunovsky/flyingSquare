@@ -7,7 +7,7 @@ Game.Menu.prototype = {
         this.music = this.add.audio( 'menu-music', 0.5, true );
 	    this.music.play();
         this.keySpacebar = this.input.keyboard.addKey( Phaser.Keyboard.SPACEBAR );
-        var gameName = this.add.text(this.world.centerX, -150, 'CURVY COPTER', {
+        var gameName = this.add.text(this.world.centerX, -150, 'FlyingSquare', {
                 font: "Squada One",
                 fontSize: 100,
                 fill: '#333'

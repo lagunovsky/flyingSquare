@@ -9,7 +9,7 @@ Game.Boot = {
     preload: function() {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.setScreenSize(true);
-        this.load.image('progressBar', 'assets/gfx/progress_bar.png');
+        this.load.image('progressBar', '/gfx/progress_bar.png');
     },
     create: function() {
         this.physics.startSystem( Phaser.Physics.ARCADE );
