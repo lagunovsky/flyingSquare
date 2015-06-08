@@ -10,6 +10,7 @@ var
     myth = require('gulp-myth'),
     mainBowerFiles = require('main-bower-files'),
     concat = require('gulp-concat'),
+    addsrc = require('gulp-add-src'),
     package = require('./package.json');
 
 
@@ -40,43 +41,46 @@ gulp.task('css', function() {
         }));
 });
 
-gulp.task('js', function() {
-  gulp.src(['assets/js/libs.js', 'assets/js/states/*.js', 'assets/js/entities/*.js', 'assets/js/helpers/*.js', 'assets/js/app.js'])
+gulp.task('js', ['bs-reload'], function() {
+  gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/helpers/*', 'assets/js/app.js'])
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
     .pipe(uglify())
     .pipe(header(banner, {package: package}))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/js/'));
+
+    gulp.src('assets/js/libs.js')
+    .pipe(gulp.dest('public/js/'));
 });
 
-gulp.task('bower', function() {
+gulp.task('js-build', ['bs-reload'], function() {
+  gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/helpers/*', 'assets/js/app.js'])
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.js'))
+    .pipe(uglify())
+    .pipe(addsrc.prepend('assets/js/libs.js'))
+    .pipe(concat('app.js'))
+    .pipe(header(banner, {package: package}))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('public/js/'));
+});
+
+gulp.task('bower', ['js'], function() {
     gulp.src(mainBowerFiles())
         .pipe(concat('libs.js'))
         .pipe(uglify())
         .pipe(gulp.dest('assets/js/'));
 });
 
-var BROWSER_SYNC_RELOAD_DELAY = 500;
-gulp.task('nodemon', function(cb) {
-    var called = false;
-    return nodemon({
-            script: 'app.js',
-            ignore: ['assets/', 'public/', 'node_modules/']
-        })
-        .on('start', function onStart() {
-            if (!called) {
-                cb();
-            }
-            called = true;
-        })
-        .on('restart', function onRestart() {
-            setTimeout(function reload() {
-                browserSync.reload({
-                    stream: false
-                });
-            }, BROWSER_SYNC_RELOAD_DELAY);
-        });
+gulp.task('nodemon', function () {
+  nodemon({
+    script: 'app.js',
+    ext: 'js',
+    ignore: ['assets/', 'public/', 'node_modules/'],
+    tasks: ['bs-reload'],
+    env: { 'DEBUG': 'http' }
+  });
 });
 
 gulp.task('browser-sync', ['nodemon'], function() {
@@ -93,9 +97,9 @@ gulp.task('bs-reload', function () {
 });
 
 
-gulp.task('default', ['browser-sync', 'bower', 'css', 'js'],
+gulp.task('default', ['browser-sync', 'bower', 'css'],
     function() {
         gulp.watch("assets/scss/**/*.scss", ['css']);
-        gulp.watch("assets/js/**/*.js", ['js', 'bs-reload']);
+        gulp.watch("assets/js/**/*.js", ['js']);
     }
 );
