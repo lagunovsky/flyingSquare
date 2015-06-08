@@ -20,7 +20,7 @@ node_modules
 .idea
 
 # Bower
-frotend/components
+assets/components
 
 # Sourse Maps
 *.map

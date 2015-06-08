@@ -1,0 +1,6 @@
+{
+  "name": "flying-square",
+  "dependencies": {
+    "phaser": "~2.3.0"
+  }
+}
