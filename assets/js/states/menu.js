@@ -27,19 +27,6 @@ Game.Menu = {
       y: this.world.centerY - 80
     }, 1000).easing(Phaser.Easing.Bounce.Out).start();
 
-
-    var gameBegin = this.add.text(this.world.centerX, this.world.centerY + 100, 'PRESS SPACEBAR TO BEGIN', {
-      font: "Squada One",
-      fontSize: 40,
-      fill: '#333'
-    });
-    gameBegin.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
-    gameBegin.anchor.setTo(0.5, 0.5);
-    var gameBeginTween = this.add.tween(gameBegin);
-    gameBeginTween.to({
-      angle: -gameBegin.angle
-    }, 200 + Math.random() * 200, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
     var squaresEmitter = this.add.emitter(this.world.centerX, this.world.height + 20, 100);
     squaresEmitter.makeParticles(this.cache.getBitmapData('square'));
     squaresEmitter.maxParticleScale = 1.2;
@@ -54,8 +41,12 @@ Game.Menu = {
 
     Game.Menu.countUser = Game.Players.count;
     Game.Menu.players = this.add.graphics(0, 0);
-    Game.Menu.yFlag = true;
+    Game.Menu.flags = {
+      identifier: true,
+      message: true
+    };
     Game.Menu.renderConnectedUsers();
+    Game.Menu.renderStartMessage();
 
     this.keySpacebar.onDown.addOnce(function () {
       //this.music.stop();
@@ -63,18 +54,18 @@ Game.Menu = {
     }, this);
   },
   update: function () {
-    if(Game.Menu.countUser != Game.Players.count){
+    if (Game.Menu.countUser != Game.Players.count) {
       Game.Menu.renderConnectedUsers();
-      console.log('lol');
+      Game.Menu.countUser = Game.Players.count;
     }
-    // graphics.lineStyle(2, 0xffd900, 1);
   },
-  renderConnectedUsers: function(){
+  renderConnectedUsers: function () {
     var indent = 0;
     var count = 0;
 
-    Game.Menu.players.clear();
+    console.log(Game.Players);
 
+    Game.Menu.players.clear();
     for (var playerID in Game.Players) {
       if (playerID != 'count') {
         var playerColor = Phaser.Color.hexToColor(Game.Players[playerID].color);
@@ -89,8 +80,8 @@ Game.Menu = {
         indent = count * 60 - 150;
         Game.Menu.players.drawCircle(this.world.centerX + indent, this.world.centerY, r);
 
-        if (playerID == Game.Player && Game.Menu.yFlag) {
-          Game.Menu.yFlag = false;
+        if (playerID == Game.Player && Game.Menu.flags.identifier) {
+          Game.Menu.flags.identifier = false;
           var you = this.add.text(this.world.centerX + indent - 7, this.world.centerY - 15, 'Y', {
             font: "Squada One",
             fontSize: 35,
@@ -103,6 +94,27 @@ Game.Menu = {
           }, 600, Phaser.Easing.Linear.None, true, 0, 2000, true);
         }
       }
+    }
+  },
+
+  renderStartMessage: function () {
+    var msg = 'PRESS SPACEBAR TO BEGIN';
+    if (Game.Player == false) {
+      msg = 'ALL SLOTS OCCEPIED';
+    }
+    if (Game.Menu.flags.message) {
+      Game.Menu.flags.message = false;
+      var gameBegin = this.add.text(this.world.centerX, this.world.centerY + 100, msg, {
+        font: "Squada One",
+        fontSize: 40,
+        fill: '#333'
+      });
+      gameBegin.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
+      gameBegin.anchor.setTo(0.5, 0.5);
+      var gameBeginTween = this.add.tween(gameBegin);
+      gameBeginTween.to({
+        angle: -gameBegin.angle
+      }, 200 + Math.random() * 200, Phaser.Easing.Linear.None, true, 0, 1000, true);
     }
   }
 };

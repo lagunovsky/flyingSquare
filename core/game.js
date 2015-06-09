@@ -12,9 +12,14 @@ var game = {
       game.players[id] = {
         color: game.getPlayerColor(game.players.count)
       }
+      debug('add %s; players: %o', id, game.players);
+      return id;
+    }else{
+      debug('add close %s;', id);
+      return false;
     }
-    debug('add %s; players: %o', id, game.players);
-    return id;
+
+
   },
   delPlayer: function(id){
     game.players.count--;
