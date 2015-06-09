@@ -1,9 +1,15 @@
 Game.Socket.on('playerConnected', function (player) {
   Game.Player = player;
-  console.log(player);
 });
 
 Game.Socket.on('getAllPlayers', function (players) {
   Game.Players = players;
-  console.log(Game.Players);
 });
+
+Game.Socket.on('start', function () {
+  game.state.start('Play');
+});
+
+Game.Socket.playerStart = function(){
+  Game.Socket.emit('playerStart', Game.Socket.id);
+};

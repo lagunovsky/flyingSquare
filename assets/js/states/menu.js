@@ -50,20 +50,19 @@ Game.Menu = {
 
     this.keySpacebar.onDown.addOnce(function () {
       //this.music.stop();
-      //this.state.start('Play');
+      Game.Socket.playerStart();
+      this.state.start('Waiting');
     }, this);
   },
   update: function () {
     if (Game.Menu.countUser != Game.Players.count) {
-      Game.Menu.renderConnectedUsers();
       Game.Menu.countUser = Game.Players.count;
+      Game.Menu.renderConnectedUsers();
     }
   },
   renderConnectedUsers: function () {
     var indent = 0;
     var count = 0;
-
-    console.log(Game.Players);
 
     Game.Menu.players.clear();
     for (var playerID in Game.Players) {
@@ -82,17 +81,22 @@ Game.Menu = {
 
         if (playerID == Game.Player && Game.Menu.flags.identifier) {
           Game.Menu.flags.identifier = false;
-          var you = this.add.text(this.world.centerX + indent - 7, this.world.centerY - 15, 'Y', {
+          Game.Menu.you = this.add.text(this.world.centerX + indent - 7, this.world.centerY - 15, 'Y', {
             font: "Squada One",
             fontSize: 35,
             fill: '#FFFFFF'
           });
-          you.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
-          var youTween = this.add.tween(you);
-          youTween.to({
-            angle: -you.angle
+          Game.Menu.you.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
+          Game.Menu.youTween = this.add.tween(Game.Menu.you);
+          Game.Menu.youTween.to({
+            angle: -Game.Menu.you.angle
           }, 600, Phaser.Easing.Linear.None, true, 0, 2000, true);
         }
+
+        if(!Game.Menu.flags.identifier && playerID == Game.Player){
+          Game.Menu.you.position.x = this.world.centerX + indent - 7;
+        }
+
       }
     }
   },

@@ -43,4 +43,4 @@ Game.Preloader = {
 
   update: function () {
   }
-}
+};

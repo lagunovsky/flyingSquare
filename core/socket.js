@@ -9,9 +9,17 @@ module.exports = function (http) {
     socket.emit('playerConnected', game.addPlayer(socket.id));
     io.emit('getAllPlayers', game.players);
 
+    socket.on('playerStart', function(id){
+      if(game.start(id)){
+        console.log('start');
+        io.emit('start', 'start');
+      }
+    });
+
 
     socket.on('disconnect', function(){
       game.delPlayer(socket.id);
+      io.emit('getAllPlayers', game.players);
     });
   });
 };
