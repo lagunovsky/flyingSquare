@@ -1,7 +1,7 @@
 Game.Menu = {
   create: function () {
     this.music = this.add.audio('menu-music', 0.5, true);
-    this.music.play();
+    //this.music.play();
     this.keySpacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     var gameName = this.add.text(this.world.centerX, 0, 'FlyingSquare!', {
@@ -52,12 +52,57 @@ Game.Menu = {
     squaresEmitter.maxRotation = 45;
     squaresEmitter.flow(25000, 500);
 
+    Game.Menu.countUser = Game.Players.count;
+    Game.Menu.players = this.add.graphics(0, 0);
+    Game.Menu.yFlag = true;
+    Game.Menu.renderConnectedUsers();
+
     this.keySpacebar.onDown.addOnce(function () {
       //this.music.stop();
       //this.state.start('Play');
     }, this);
   },
   update: function () {
+    if(Game.Menu.countUser != Game.Players.count){
+      Game.Menu.renderConnectedUsers();
+      console.log('lol');
+    }
+    // graphics.lineStyle(2, 0xffd900, 1);
+  },
+  renderConnectedUsers: function(){
+    var indent = 0;
+    var count = 0;
 
+    Game.Menu.players.clear();
+
+    for (var playerID in Game.Players) {
+      if (playerID != 'count') {
+        var playerColor = Phaser.Color.hexToColor(Game.Players[playerID].color);
+        playerColor = Phaser.Color.getColor(playerColor.r, playerColor.g, playerColor.b);
+        var r = 40;
+        if (playerID == Game.Player) {
+          r = 55;
+        }
+        Game.Menu.players.beginFill(playerColor, 1);
+
+        count++;
+        indent = count * 60 - 150;
+        Game.Menu.players.drawCircle(this.world.centerX + indent, this.world.centerY, r);
+
+        if (playerID == Game.Player && Game.Menu.yFlag) {
+          Game.Menu.yFlag = false;
+          var you = this.add.text(this.world.centerX + indent - 7, this.world.centerY - 15, 'Y', {
+            font: "Squada One",
+            fontSize: 35,
+            fill: '#FFFFFF'
+          });
+          you.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
+          var youTween = this.add.tween(you);
+          youTween.to({
+            angle: -you.angle
+          }, 600, Phaser.Easing.Linear.None, true, 0, 2000, true);
+        }
+      }
+    }
   }
 };
