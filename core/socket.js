@@ -16,6 +16,10 @@ module.exports = function (http) {
       }
     });
 
+    socket.on('started', function(){
+      game.started();
+      io.emit('getAllPlayers', game.players);
+    });
 
     socket.on('disconnect', function(){
       game.delPlayer(socket.id);

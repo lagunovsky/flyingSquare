@@ -13,3 +13,7 @@ Game.Socket.on('start', function () {
 Game.Socket.playerStart = function(){
   Game.Socket.emit('playerStart', Game.Socket.id);
 };
+
+Game.Socket.started = function(){
+  Game.Socket.emit('started', Game.Socket.id);
+};

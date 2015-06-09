@@ -11,6 +11,7 @@ game.state.add('Preloader', Game.Preloader);
 game.state.add('Menu', Game.Menu);
 game.state.add('Waiting', Game.Waiting);
 game.state.add('Play', Game.Play);
+game.state.add('Gameover', Game.Gameover);
 
 // Start boot state
 game.state.start('Boot');

@@ -1,5 +1,16 @@
 Game.Play = {
   create: function () {
+    Game.Socket.started();
+
+
+    var copter = this.add.bitmapData(32, 32);
+    copter.context.fillStyle = Game.Players[Game.Player].color;
+    copter.context.fillRect(0, 0, 32, 32);
+    this.cache.addBitmapData('hero', copter);
+
+
+
+
     this.tick = 0;
     this.gameMusic = this.add.audio('background-music', 0.5, true);
     this.explosion = this.add.audio('explosion', 1, false);
@@ -120,7 +131,7 @@ Game.Play = {
       }
 
       game.time.events.add(Phaser.Timer.SECOND * 1.5, function () {
-        game.state.start('Play');
+        game.state.start('Gameover');
       }, self);
     }
   }

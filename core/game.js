@@ -43,6 +43,14 @@ var game = {
       }
     }
     return flag;
+  },
+  started: function(){
+    for (var player in game.players) {
+      game.players[player].start = false;
+    }
+  },
+  restart: function(){
+
   }
 };
 
