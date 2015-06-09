@@ -79,7 +79,7 @@ gulp.task('nodemon', function () {
     ext: 'js',
     ignore: ['assets/', 'public/', 'node_modules/'],
     tasks: ['bs-reload'],
-    env: { 'DEBUG': 'http' }
+    env: { 'DEBUG': 'http game' }
   });
 });
 
