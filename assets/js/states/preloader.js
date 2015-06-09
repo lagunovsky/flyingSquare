@@ -19,20 +19,6 @@ Game.Preloader = {
     block.context.fillStyle = '#444';
     block.context.fillRect(0, 0, 1, 1);
     this.cache.addBitmapData('block', block);
-    var block2 = this.add.bitmapData(1, 1);
-    block2.context.fillStyle = '#959595';
-    block2.context.fillRect(0, 0, 1, 1);
-    this.cache.addBitmapData('block2', block2);
-    var block3 = this.add.bitmapData(1, 1);
-    block3.context.fillStyle = '#262525';
-    block3.context.fillRect(0, 0, 1, 1);
-    this.cache.addBitmapData('block3', block3);
-
-    var copter = this.add.bitmapData(32, 32);
-    copter.context.fillStyle = '#111';
-    copter.context.fillRect(0, 0, 32, 32);
-    this.cache.addBitmapData('hero', copter);
-
   },
 
   create: function () {
