@@ -1,7 +1,7 @@
 var Game = {
   Socket: io('localhost:3000'),
-  Players: [],
-  Player: {}
+  Players: {},
+  Player: ''
 };
 
 Game.Boot = {
