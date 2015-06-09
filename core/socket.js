@@ -11,7 +11,6 @@ module.exports = function (http) {
 
     socket.on('playerStart', function(id){
       if(game.start(id)){
-        console.log('start');
         io.emit('start', 'start');
       }
     });
@@ -20,6 +19,15 @@ module.exports = function (http) {
       game.started();
       io.emit('getAllPlayers', game.players);
     });
+
+    socket.on('reqPosition', function(id){
+      io.emit('resPosition', id);
+    });
+
+    socket.on('getMap', function(height){
+      io.emit('getMap', game.getMap(height));
+    });
+
 
     socket.on('disconnect', function(){
       game.delPlayer(socket.id);

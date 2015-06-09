@@ -42,30 +42,13 @@ Game.Blocks.prototype.update = function () {
   self.fillScreen(xMax, false);
 };
 
-Game.Blocks.prototype.updateTracer = function () {
-  var self = this;
-
-  self.tracer.y += Phaser.Utils.Rand(-self.tracer.yVariance, self.tracer.yVariance);
-  self.tracer.y = Math.min(Math.max(self.tracer.yMin, self.tracer.y), self.tracer.yMax);
-
-  self.tracer.h += Phaser.Utils.Rand(-self.tracer.hVariance, self.tracer.hVariance);
-  self.tracer.h = Math.min(Math.max(self.tracer.hMin, self.tracer.h), self.tracer.hMax);
-
-  if (self.tracer.y + self.tracer.h > self.tracer.yMax) {
-    var halfDiff = ( self.tracer.y + self.tracer.h - self.tracer.yMax ) / 2;
-    self.tracer.y -= halfDiff;
-    self.tracer.h -= halfDiff;
-  }
-};
-
 Game.Blocks.prototype.fillScreen = function (width, initial) {
   var self = this;
 
   if (initial || self.state.hasStarted) {
 
     while (width < game.width + self.state.blockSize - self.state.speed) {
-      self.updateTracer();
-
+      self.tracer = Game.Map.shift();
       self.tick++;
 
       var blockTop,
