@@ -41,7 +41,7 @@ gulp.task('css', function() {
         }));
 });
 
-gulp.task('js', ['bs-reload'], function() {
+gulp.task('js', function() {
   gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/helpers/*', 'assets/js/app.js'])
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
@@ -51,18 +51,6 @@ gulp.task('js', ['bs-reload'], function() {
     .pipe(gulp.dest('public/js/'));
 
     gulp.src('assets/js/libs.js')
-    .pipe(gulp.dest('public/js/'));
-});
-
-gulp.task('js-build', ['bs-reload'], function() {
-  gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/helpers/*', 'assets/js/app.js'])
-    .pipe(sourcemaps.init())
-    .pipe(concat('app.js'))
-    .pipe(uglify())
-    .pipe(addsrc.prepend('assets/js/libs.js'))
-    .pipe(concat('app.js'))
-    .pipe(header(banner, {package: package}))
-    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/js/'));
 });
 
@@ -100,6 +88,6 @@ gulp.task('bs-reload', function () {
 gulp.task('default', ['browser-sync', 'bower', 'css'],
     function() {
         gulp.watch("assets/scss/**/*.scss", ['css']);
-        gulp.watch("assets/js/**/*.js", ['js']);
+        gulp.watch("assets/js/**/*.js", ['js', 'bs-reload']);
     }
 );
