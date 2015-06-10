@@ -1,86 +1,63 @@
-Game.Blocks = function (opt, state) {
-  var self = this;
-  self.state = state;
-  self.blockGroup = game.add.group();
-  self.blockGroup.enableBody = true;
-  self.blockGroup.createMultiple(300, game.cache.getBitmapData('block'));
-  self.tick = 0;
+Game.Blocks = function (state) {
+  Game.Blocks.state = state;
+  Game.Blocks.blockGroup = game.add.group();
+  Game.Blocks.blockGroup.enableBody = true;
+  Game.Blocks.blockGroup.createMultiple(300, game.cache.getBitmapData('block'));
+  Game.Blocks.tick = 0;
 
-  self.tracer = {
-    y: game.height / 2 - 300,
-    yMin: 150,
-    yMax: game.height - 100,
-    yVariance: self.state.variance,
-    h: 500,
-    hMin: 300,
-    hMax: 700,
-    hVariance: self.state.variance
-  };
-
-  self.fillScreen(0, true);
+  Game.Blocks.tracer = Game.Map.shift();
+  this.fillScreen(0, true);
 };
 
 Game.Blocks.prototype.update = function () {
-  var self = this;
   var xMin = 100,
     xMax = 0;
-
-  self.blockGroup.forEachAlive(function (block) {
-    if (self.state.hasStarted) {
-      block.body.velocity.x = self.state.speed;
+  Game.Blocks.blockGroup.forEachAlive(function (block) {
+    if (Game.Blocks.state.hasStarted) {
+      block.body.velocity.x = Game.Blocks.state.speed;
     }
-    xMin = Math.min(xMin, block.body.x + self.state.blockSize);
-    xMax = Math.max(xMax, block.body.x + self.state.blockSize);
+    xMin = Math.min(xMin, block.body.x + Game.Blocks.state.blockSize);
+    xMax = Math.max(xMax, block.body.x + Game.Blocks.state.blockSize);
   });
-
-  self.blockGroup.forEachAlive(function (block) {
+  Game.Blocks.blockGroup.forEachAlive(function (block) {
     if (block.x + block.body.width < 0) {
       block.kill();
     }
   });
-
-  self.fillScreen(xMax, false);
+  this.fillScreen(xMax, false);
 };
 
 Game.Blocks.prototype.fillScreen = function (width, initial) {
-  var self = this;
-
-  if (initial || self.state.hasStarted) {
-
-    while (width < game.width + self.state.blockSize - self.state.speed) {
-      self.tracer = Game.Map.shift();
-      self.tick++;
-
-      var blockTop,
+  if (initial || Game.Blocks.state.hasStarted) {
+    while (width < game.width + Game.Blocks.state.blockSize - Game.Blocks.state.speed) {
+      Game.Blocks.tracer = Game.Map.shift();
+      Game.Blocks.tick++;
+      var
         blockTopY,
         blockTopH,
-        blockBot,
         blockBotY,
         blockBotH;
 
       blockTopY = 0;
-      blockTopH = self.tracer.y;
-      blockBotY = blockTopH + self.tracer.h;
+      blockTopH = Game.Blocks.tracer.y;
+      blockBotY = blockTopH + Game.Blocks.tracer.h;
       blockBotH = game.height - blockBotY;
 
-      newBlockTop = self.createOne(width, blockTopY, self.state.blockSize, blockTopH);
-      newBlockBot = self.createOne(width, blockBotY, self.state.blockSize, blockBotH);
+      newBlockTop = this.createOne(width, blockTopY, Game.Blocks.state.blockSize, blockTopH);
+      newBlockBot = this.createOne(width, blockBotY, Game.Blocks.state.blockSize, blockBotH);
       if (!initial) {
-        newBlockTop.body.velocity.x = self.state.speed;
-        newBlockBot.body.velocity.x = self.state.speed;
+        newBlockTop.body.velocity.x = Game.Blocks.state.speed;
+        newBlockBot.body.velocity.x = Game.Blocks.state.speed;
       }
-
-      width += self.state.blockSize;
+      width += Game.Blocks.state.blockSize;
     }
   }
 };
-
 Game.Blocks.prototype.createOne = function (x, y, w, h) {
-  var self = this;
-  if (self.blockGroup.countDead()) {
-    var block = self.blockGroup.getFirstDead();
+  if (Game.Blocks.blockGroup.countDead()) {
+    var block = Game.Blocks.blockGroup.getFirstDead();
   } else {
-    var block = self.blockGroup.create(x, y, game.cache.getBitmapData('block'));
+    var block = Game.Blocks.blockGroup.create(x, y, game.cache.getBitmapData('block'));
   }
   block.reset(x, y);
   block.body.allowGravity = false;
