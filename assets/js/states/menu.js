@@ -50,7 +50,7 @@ Game.Menu = {
 
     this.keySpacebar.onDown.addOnce(function () {
       //this.music.stop();
-      Game.Socket.playerStart();
+      Game.Manager.playerStart();
       this.state.start('Waiting');
     }, this);
   },
