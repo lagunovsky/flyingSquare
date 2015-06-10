@@ -4,9 +4,11 @@ Game.Blocks = function (state) {
   Game.Blocks.blockGroup.enableBody = true;
   Game.Blocks.blockGroup.createMultiple(300, game.cache.getBitmapData('block'));
   Game.Blocks.tick = 0;
+  Game.Blocks.blockSize = 20;
 
   Game.Blocks.tracer = Game.Map.shift();
   this.fillScreen(0, true);
+  console.log(Game.Blocks);
 };
 
 Game.Blocks.prototype.update = function () {
@@ -16,8 +18,8 @@ Game.Blocks.prototype.update = function () {
     if (Game.Blocks.state.hasStarted) {
       block.body.velocity.x = Game.Blocks.state.speed;
     }
-    xMin = Math.min(xMin, block.body.x + Game.Blocks.state.blockSize);
-    xMax = Math.max(xMax, block.body.x + Game.Blocks.state.blockSize);
+    xMin = Math.min(xMin, block.body.x + Game.Blocks.blockSize);
+    xMax = Math.max(xMax, block.body.x + Game.Blocks.blockSize);
   });
   Game.Blocks.blockGroup.forEachAlive(function (block) {
     if (block.x + block.body.width < 0) {
@@ -29,7 +31,7 @@ Game.Blocks.prototype.update = function () {
 
 Game.Blocks.prototype.fillScreen = function (width, initial) {
   if (initial || Game.Blocks.state.hasStarted) {
-    while (width < game.width + Game.Blocks.state.blockSize - Game.Blocks.state.speed) {
+    while (width < game.width + Game.Blocks.blockSize - Game.Blocks.state.speed) {
       Game.Blocks.tracer = Game.Map.shift();
       Game.Blocks.tick++;
       var
@@ -43,13 +45,13 @@ Game.Blocks.prototype.fillScreen = function (width, initial) {
       blockBotY = blockTopH + Game.Blocks.tracer.h;
       blockBotH = game.height - blockBotY;
 
-      newBlockTop = this.createOne(width, blockTopY, Game.Blocks.state.blockSize, blockTopH);
-      newBlockBot = this.createOne(width, blockBotY, Game.Blocks.state.blockSize, blockBotH);
+      newBlockTop = this.createOne(width, blockTopY, Game.Blocks.blockSize, blockTopH);
+      newBlockBot = this.createOne(width, blockBotY, Game.Blocks.blockSize, blockBotH);
       if (!initial) {
         newBlockTop.body.velocity.x = Game.Blocks.state.speed;
         newBlockBot.body.velocity.x = Game.Blocks.state.speed;
       }
-      width += Game.Blocks.state.blockSize;
+      width += Game.Blocks.blockSize;
     }
   }
 };
