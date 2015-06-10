@@ -1,7 +1,7 @@
 Game.Menu = {
   create: function () {
     this.music = this.add.audio('menu-music', 0.5, true);
-    //this.music.play();
+    this.music.play();
     this.keySpacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     var gameName = this.add.text(this.world.centerX, 0, 'FlyingSquare!', {
@@ -49,7 +49,7 @@ Game.Menu = {
     Game.Menu.renderStartMessage();
 
     this.keySpacebar.onDown.addOnce(function () {
-      //this.music.stop();
+      this.music.stop();
       Game.Manager.playerStart();
       this.state.start('Waiting');
     }, this);

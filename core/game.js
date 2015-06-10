@@ -8,8 +8,7 @@ var game = {
   players: {
     count: -1
   },
-  //updateTime: config.get("updateTime"),
-  updateTime: 16,
+  updateTime: 1000 / config.get("updateTime"),
   createEventLoop: function (cb) {
     debug('createEventLoop');
     this.eventLoopTimer = setInterval(function () {
@@ -64,7 +63,7 @@ var game = {
     }
   },
   playerEnd: function (id) {
-    debug('playerEnd %s',id);
+    debug('playerEnd %s', id);
     game.players[id].end = true;
     var flag = true;
     for (var player in game.players) {
@@ -75,7 +74,7 @@ var game = {
         }
       }
     }
-    if(flag){
+    if (flag) {
       this.destroyEventLoop();
     }
   },
@@ -93,7 +92,21 @@ var game = {
       variance: 30
     };
 
-    for (var i = 0; i < 10000; i++) {
+    for (var i = 0; i < 70; i++) {
+      this.tracers.push({
+        y: tracer.y,
+        variance: tracer.variance,
+        yMin: tracer.yMin,
+        yMax: tracer.yMax,
+        yVariance: tracer.variance,
+        h: tracer.h,
+        hMin: 0,
+        hMax: 0,
+        hVariance: tracer.variance
+      });
+    }
+
+    for (i = 0; i < 10000; i++) {
       if (i % 200 == 0 && tracer.variance <= 145) {
         tracer.variance += 5;
       }

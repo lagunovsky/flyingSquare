@@ -1,13 +1,10 @@
 Copter = function (state, player) {
   Phaser.Sprite.call(this, game, 200, game.height / 2, game.cache.getBitmapData(player));
-
-  if(Game.Player == player){
-    game.physics.arcade.enableBody(this);
-    this.body.allowGravity = true;
-    this.body.width = 32;
-    this.body.height = 32;
-    this.body.gravity.y = 2;
-  }
+  game.physics.arcade.enableBody(this);
+  this.body.allowGravity = true;
+  this.body.width = 32;
+  this.body.height = 32;
+  this.body.gravity.y = 1000;
 
   this.anchor.setTo(0.5, 0.5);
   this.state = state;
@@ -23,7 +20,7 @@ Copter.prototype.update = function () {
   if (this.player == Game.Player) {
     if (this.state.hasStarted && !this.state.dead) {
       if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-        this.body.velocity.y -= 1;
+        this.body.velocity.y -= 32;
       }
       if (this.body.velocity.y <= -300) {
         this.body.velocity.y = -300;

@@ -9,8 +9,8 @@ Game.Play = {
     this.hasStarted = false;
     this.dead = false;
     this.speed = -250;
-    this.speedInterval = 200;
-    this.speedGain = -0;
+    this.speedInterval = 50;
+    this.speedGain = -10;
     this.speedMin = -5000;
 
     this.createBlockSets();
@@ -31,6 +31,7 @@ Game.Play = {
       this.blockSets.forEach(function (blockSet) {
         blockSet.update();
       });
+      console.log(this.blockSets);
 
       this.textScore.setText('SCORE: ' + this.tick);
       if (this.game.device.localStorage) {
@@ -44,11 +45,8 @@ Game.Play = {
   },
   updateCopters: function (condition) {
     if (condition.id != Game.Player) {
-      //console.log('!updateCopters',condition);
         this.heroes[condition.id].position.y = condition.pos;
-        //this.heroes[condition.id].update();
-        console.log(this.heroes[condition.id].position.y);
-        //this.heroes[condition.id].angle = condition.angle;
+        this.heroes[condition.id].angle = condition.angle;
     }
   },
   startGame: function () {
@@ -58,8 +56,7 @@ Game.Play = {
     }
   },
   createBlockSets: function () {
-    this.blockSets = [];
-    this.blockSets.push(new Game.Blocks(this));
+    this.blockSets = [new Game.Blocks(this)];
   },
   createScope: function () {
     this.scoreStyle = {font: '40px Squada One', fill: '#fff', align: 'center'};
@@ -90,6 +87,7 @@ Game.Play = {
     }
   },
   gameOver: function (player) {
+    Game.Manager.die();
     this.explosion.play();
     if (Game.Player == player) {
       this.dead = true;

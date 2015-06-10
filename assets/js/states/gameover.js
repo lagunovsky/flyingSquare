@@ -1,17 +1,15 @@
 Game.Gameover = {
   create: function () {
     Game.Manager.playerEnd();
-
     this.keySpacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-    var gameWaiting = this.add.text(this.world.centerX, this.world.centerY, 'You ' + Game.Players[Game.Player].place, {
+    var gameWaiting = this.add.text(this.world.centerX, this.world.centerY, 'Gameover', {
       font: "Squada One",
       fontSize: 96,
       fill: '#333'
     });
     gameWaiting.angle = (2 + Math.random() * 5) * (Math.random() > 0.5 ? 1 : -1);
     gameWaiting.anchor.setTo(0.5, 0.5);
-
 
     var gameBegin = this.add.text(this.world.centerX, this.world.centerY + 100, 'PRESS SPACEBAR TO START MENU', {
       font: "Squada One",
@@ -37,9 +35,7 @@ Game.Gameover = {
     squaresEmitter.maxRotation = 45;
     squaresEmitter.flow(25000, 500);
 
-
     this.keySpacebar.onDown.addOnce(function () {
-      //this.music.stop();
       this.state.start('Menu');
     }, this);
   }

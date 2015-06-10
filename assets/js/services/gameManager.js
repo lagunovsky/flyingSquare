@@ -20,8 +20,7 @@ Game.Manager.started = function () {
 
 Game.Manager.on('getCondition', function () {
   if (!Game.Play.dead) {
-    if(Game.Players[Game.Player].position && Game.Players[Game.Player].angle){
-      //console.log(Game.Players[Game.Player]);
+    if (Game.Players[Game.Player].position && Game.Players[Game.Player].angle) {
       Game.Manager.emit('condition', {
         id: Game.Player,
         pos: Game.Players[Game.Player].position,
@@ -29,6 +28,14 @@ Game.Manager.on('getCondition', function () {
       });
     }
   }
+});
+
+Game.Manager.die = function () {
+  Game.Manager.emit('die', Game.Player);
+};
+
+Game.Manager.on('die', function (player) {
+  Game.Play.heroes[player].die();
 });
 
 Game.Manager.on('condition', function (condition) {

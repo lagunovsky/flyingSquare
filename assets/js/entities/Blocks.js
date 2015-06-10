@@ -3,12 +3,10 @@ Game.Blocks = function (state) {
   Game.Blocks.blockGroup = game.add.group();
   Game.Blocks.blockGroup.enableBody = true;
   Game.Blocks.blockGroup.createMultiple(300, game.cache.getBitmapData('block'));
-  Game.Blocks.tick = 0;
   Game.Blocks.blockSize = 20;
+  Game.Blocks.block = 0;
 
-  Game.Blocks.tracer = Game.Map.shift();
   this.fillScreen(0, true);
-  console.log(Game.Blocks);
 };
 
 Game.Blocks.prototype.update = function () {
@@ -32,8 +30,8 @@ Game.Blocks.prototype.update = function () {
 Game.Blocks.prototype.fillScreen = function (width, initial) {
   if (initial || Game.Blocks.state.hasStarted) {
     while (width < game.width + Game.Blocks.blockSize - Game.Blocks.state.speed) {
-      Game.Blocks.tracer = Game.Map.shift();
-      Game.Blocks.tick++;
+      Game.Blocks.block++;
+      Game.Blocks.tracer = Game.Map[Game.Blocks.block];
       var
         blockTopY,
         blockTopH,

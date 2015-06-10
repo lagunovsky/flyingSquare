@@ -44,6 +44,12 @@ module.exports = function (http, game) {
       game.playerEnd(id);
     });
 
+    socket.on('die', function (player) {
+      debug('res.die');
+      debug('req.die');
+      io.emit('die', player);
+    });
+
     socket.on('getMap', function (height) {
       debug('res.getMap');
       debug('req.getMap');
