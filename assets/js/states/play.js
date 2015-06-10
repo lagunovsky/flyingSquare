@@ -27,16 +27,13 @@ Game.Play = {
       } else if (this.dead) {
         this.speed *= 0.99;
       }
-
       this.blockSets.forEach(function (blockSet) {
         blockSet.update();
       });
-
       this.textScore.setText('SCORE: ' + this.tick);
       if (this.game.device.localStorage) {
         this.textBest.setText('BEST: ' + Math.max(this.tick, this.bestScore));
       }
-
       if (!this.dead) {
         this.tick++;
       }
