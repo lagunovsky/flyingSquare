@@ -1,5 +1,7 @@
 Game.Gameover = {
   create: function () {
+    Game.Manager.playerEnd();
+
     this.keySpacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     var gameWaiting = this.add.text(this.world.centerX, this.world.centerY, 'You ' + Game.Players[Game.Player].place, {

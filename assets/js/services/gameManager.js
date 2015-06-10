@@ -11,25 +11,30 @@ Game.Manager.on('start', function () {
 });
 
 Game.Manager.playerStart = function(){
-  Game.Manager.emit('playerStart', Game.Manager.id);
+  Game.Manager.emit('playerStart', Game.Player);
 };
 
 Game.Manager.started = function(){
-  Game.Manager.emit('started', Game.Manager.id);
+  Game.Manager.emit('started', Game.Player);
 };
 
-Game.Manager.reqPosition = function(){
-  Game.Manager.emit('reqPosition', Game.Manager.id);
+Game.Manager.on('getPosition', function () {
+  if(!Game.Play.dead){
+    Game.Manager.emit('position', {
+      id: Game.Player,
+      pos: Game.Players[Game.Player].position,
+      angle: Game.Players[Game.Player].angle
+    });
+  }
+});
+
+Game.Manager.playerEnd = function(){
+  Game.Manager.emit('playerEnd', Game.Player);
 };
 
-Game.Manager.resPosition = function(cb){
-  Game.Manager.on('resPosition', function (id) {
-    cb(id);
-  });
-};
 
 Game.Manager.sendingDead = function(){
-  Game.Manager.emit('sendingDead', Game.Manager.id);
+  Game.Manager.emit('sendingDead', Game.Player);
 };
 
 Game.Manager.reqMap = function(height){
@@ -37,6 +42,5 @@ Game.Manager.reqMap = function(height){
 };
 
 Game.Manager.on('getMap', function (map) {
-  console.log(map);
   Game.Map = map;
 });

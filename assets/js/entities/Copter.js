@@ -26,6 +26,9 @@ Copter.prototype.update = function () {
         this.body.velocity.y = -300;
       }
       this.angle = this.body.velocity.y / 6 - 10;
+
+      Game.Players[Game.Player].position = this.body.y;
+      Game.Players[Game.Player].angle = this.angle;
     }
   }
   game.physics.arcade.collide(this, Game.Blocks.blockGroup, this.die);

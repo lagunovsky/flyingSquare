@@ -8,9 +8,16 @@ var game = {
   players: {
     count: -1
   },
-  updateTime:config.get("updateTime"),
-  eventLoop: function(){
-
+  updateTime: config.get("updateTime"),
+  createEventLoop: function (cb) {
+    debug('createEventLoop');
+    this.eventLoopTimer = setInterval(function () {
+      cb();
+    }, this.updateTime);
+  },
+  destroyEventLoop: function () {
+    debug('destroyEventLoop');
+    clearInterval(this.eventLoopTimer);
   },
   addPlayer: function (id) {
     game.players.count++;
@@ -37,6 +44,7 @@ var game = {
   },
   start: function (id) {
     game.players[id].start = true;
+    game.players[id].end = false;
     debug('start %s; players: %o', id, game.players);
     var flag = true;
     for (var player in game.players) {
@@ -53,6 +61,25 @@ var game = {
     for (var player in game.players) {
       game.players[player].start = false;
     }
+  },
+  playerEnd: function (id) {
+    debug('playerEnd %s',id);
+    game.players[id].end = true;
+    var flag = true;
+    for (var player in game.players) {
+      if (player != 'count') {
+        if (game.players[player].end == false) {
+          flag = false;
+          break;
+        }
+      }
+    }
+    if(flag){
+      this.destroyEventLoop();
+    }
+  },
+  isEnd: function(){
+    return game.players[id].end;
   },
   generateMap: function (height) {
     this.generateHeightTracers = height;
