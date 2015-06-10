@@ -36,7 +36,7 @@ Copter.prototype.update = function () {
 
 Copter.prototype.createEmitter = function (copter) {
   copter.emitterDark = game.add.emitter(0, 0, 20);
-  copter.emitterDark.makeParticles(game.cache.getBitmapData('square'));
+  copter.emitterDark.makeParticles(game.cache.getBitmapData(copter.player));
   copter.emitterDark.minParticleScale = 0.1;
   copter.emitterDark.maxParticleScale = 0.5;
   copter.emitterDark.setYSpeed(-15, 15);
