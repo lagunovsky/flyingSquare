@@ -10,7 +10,6 @@ var
     myth = require('gulp-myth'),
     mainBowerFiles = require('main-bower-files'),
     concat = require('gulp-concat'),
-    addsrc = require('gulp-add-src'),
     package = require('./package.json');
 
 

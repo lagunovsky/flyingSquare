@@ -1,6 +1,6 @@
 {
   "name": "flying-square",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Multiplayer runner.",
   "main": "app.js",
   "scripts": {
@@ -13,7 +13,6 @@
   "keywords": [
     "phaser",
     "game",
-    "browserify",
     "nodejs",
     "socket.io",
     "gulp"
@@ -40,7 +39,6 @@
   "devDependencies": {
     "browser-sync": "^2.6.4",
     "gulp": "^3.8.11",
-    "gulp-add-src": "^0.2.0",
     "gulp-bower": "0.0.10",
     "gulp-concat": "^2.5.2",
     "gulp-csso": "^1.0.0",
