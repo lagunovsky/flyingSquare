@@ -8,13 +8,6 @@ var game = {
   players: {
     count: -1
   },
-  evenLoopFlag: false,
-  updateTime: config.get("game:updateTime"),
-  createEvenLoop: function(){
-    setTimeout(function(){
-
-    },this.updateTime);
-  },
   addPlayer: function (id) {
     game.players.count++;
     if (game.players.count < 4) {
@@ -41,22 +34,24 @@ var game = {
   start: function (id) {
     game.players[id].start = true;
     debug('start %s; players: %o', id, game.players);
-    this.evenLoopFlag = true;
+    var flag = true;
     for (var player in game.players) {
       if (player != 'count') {
         if (game.players[player].start == false) {
-          this.evenLoopFlag = false;
+          flag = false;
           break;
         }
       }
     }
-    return this.evenLoopFlag;
+    return flag;
   },
   started: function () {
-    this.evenLoopFlag = true;
     for (var player in game.players) {
       game.players[player].start = false;
     }
+  },
+  restart: function () {
+
   },
   generateMap: function (height) {
     this.generateHeightTracers = height;
@@ -110,8 +105,8 @@ var game = {
     } else {
       var tempTracers = [];
       var corrector = height - this.generateHeightTracers;
+      debug('reGenerateMap');
       if (corrector != 0) {
-        debug('reGenerateMap');
         for (var i = 0; i < 10000; i++) {
           tempTracers.push({
             y: this.tracers[i].y - corrector,
@@ -127,7 +122,6 @@ var game = {
         }
         return tempTracers;
       } else {
-        debug('send generatedMap');
         return this.tracers;
       }
     }
@@ -135,7 +129,7 @@ var game = {
   randomInteger: function (min, max) {
     min = min * 1000;
     max = max * 1000;
-    var rand = min - 0.5 + Math.random() * (max - min + 1);
+    var rand = min - 0.5 + Math.random() * (max - min + 1)
     rand = Math.round(rand);
     return rand / 1000;
   }

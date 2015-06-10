@@ -1,44 +1,37 @@
-var
-  io = require('socket.io'),
-  game = require('./game.js'),
-  debug = require("debug")('gameManager');
+var io = require('socket.io');
+var game = require('./game.js');
 
-var gameManager = function(http, game){
-    this.connection = io(http);
-    this.connection.on('connection', function (socket) {
-      socket.emit('playerConnected', game.addPlayer(socket.id));
-      gameManager.connection.emit('getAllPlayers', game.players);
+module.exports = function (http) {
+  io = io(http);
 
-      socket.on('playerStart', function(id){
-        debug('req.playerStart');
-        if(game.start(id)){
-          debug('res.playerStart');
-          gameManager.connection.emit('start');
-        }
-      });
+  io.on('connection', function (socket) {
 
-      socket.on('started', function(){
-        debug('req.playerStart');
-        game.started();
-        debug('res.getAllPlayers');
-        gameManager.connection.emit('getAllPlayers', game.players);
-      });
+    socket.emit('playerConnected', game.addPlayer(socket.id));
+    io.emit('getAllPlayers', game.players);
 
-      socket.on('getMap', function(height){
-        debug('req.getMap');
-        debug('res.getMap');
-        gameManager.connection.emit('getMap', game.getMap(height));
-      });
-
-      socket.on('disconnect', function(){
-        debug('req.disconnect');
-        game.delPlayer(socket.id);
-        debug('res.disconnect');
-        gameManager.connection.emit('getAllPlayers', game.players);
-      });
+    socket.on('playerStart', function(id){
+      if(game.start(id)){
+        io.emit('start', 'start');
+      }
     });
-};
 
-module.exports = function(http, game){
-  return gameManager(http, game);
+    socket.on('started', function(){
+      game.started();
+      io.emit('getAllPlayers', game.players);
+    });
+
+    socket.on('reqPosition', function(id){
+      io.emit('resPosition', id);
+    });
+
+    socket.on('getMap', function(height){
+      io.emit('getMap', game.getMap(height));
+    });
+
+
+    socket.on('disconnect', function(){
+      game.delPlayer(socket.id);
+      io.emit('getAllPlayers', game.players);
+    });
+  });
 };
