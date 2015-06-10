@@ -1,6 +1,6 @@
 {
   "name": "flying-square",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Multiplayer runner.",
   "main": "app.js",
   "scripts": {
