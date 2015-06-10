@@ -42,7 +42,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('js', function() {
-  gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/helpers/*', 'assets/js/app.js'])
+  gulp.src(['assets/js/states/*', 'assets/js/entities/*', 'assets/js/services/*', 'assets/js/app.js'])
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
     .pipe(uglify())
