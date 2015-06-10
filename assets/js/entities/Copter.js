@@ -1,45 +1,57 @@
-Game.Copter = function (opt, state) {
-  var self = this;
-  self.state = state;
-  Phaser.Sprite.call(self, game, 200, game.height / 2, game.cache.getBitmapData('hero'));
-  self.anchor.setTo(0.5, 0.5);
-  game.physics.arcade.enableBody(self);
-  self.body.allowGravity = false;
-  self.body.width = 32;
-  self.body.height = 32;
-  self.body.gravity.y = 1000;
-  game.add.existing(self);
+Copter = function (state, player) {
+  Phaser.Sprite.call(this, game, 200, game.height / 2, game.cache.getBitmapData(player));
+  game.physics.arcade.enableBody(this);
+
+  this.anchor.setTo(0.5, 0.5);
+  this.state = state;
+  this.body.allowGravity = true;
+  this.body.width = 32;
+  this.body.height = 32;
+  this.body.gravity.y = 2;
+  this.player = player;
+
+  this.createEmitter(this);
+  game.add.existing(this);
 };
 
-Game.Copter.prototype = Object.create(Phaser.Sprite.prototype);
-Game.Copter.prototype.constructor = Game.Copter;
+Copter.prototype = Object.create(Phaser.Sprite.prototype);
 
-Game.Copter.prototype.update = function () {
-  var self = this;
-
-  if (self.state.hasStarted && !this.state.dead) {
-    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-      this.body.velocity.y -= 35;
+Copter.prototype.update = function () {
+  if (this.player == Game.Player) {
+    if (this.state.hasStarted && !this.state.dead) {
+      if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        this.body.velocity.y -= 1;
+      }
+      if (this.body.velocity.y <= -300) {
+        this.body.velocity.y = -300;
+      }
+      this.angle = this.body.velocity.y / 6 - 10;
     }
-    if (this.body.velocity.y <= -300) {
-      this.body.velocity.y = -300;
-    }
-    self.angle = this.body.velocity.y / 6 - 10;
   }
-
-  game.physics.arcade.collide(self, self.state.blockSets[0].blockGroup, self.die, null, this);
+  game.physics.arcade.collide(this, Game.Blocks.blockGroup, this.die);
 };
 
-Game.Copter.prototype.die = function () {
-  var self = this;
-  if (!this.state.dead) {
-    self.state.emitterDark.x = this.x;
-    self.state.emitterDark.y = this.y;
-    self.state.emitterDark.start(true, 2000, null, 100);
-    self.state.emitterDark.forEachAlive(function (p) {
-      p.body.velocity.x += self.state.speed / 2;
-    });
-    this.alpha = 0;
-    this.state.gameover();
-  }
+Copter.prototype.createEmitter = function (copter) {
+  copter.emitterDark = game.add.emitter(0, 0, 20);
+  copter.emitterDark.makeParticles(game.cache.getBitmapData('square'));
+  copter.emitterDark.minParticleScale = 0.1;
+  copter.emitterDark.maxParticleScale = 0.5;
+  copter.emitterDark.setYSpeed(-15, 15);
+  copter.emitterDark.setXSpeed(-15, 15);
+  copter.emitterDark.gravity = -10;
+};
+
+Copter.prototype.emit = function (copter) {
+  copter.emitterDark.x = copter.x;
+  copter.emitterDark.y = copter.y;
+  copter.emitterDark.start(true, 2000, null, 100);
+  copter.emitterDark.forEachAlive(function (p) {
+    p.body.velocity.x += copter.state.speed / 2;
+  });
+  copter.alpha = 0;
+};
+
+Copter.prototype.die = function (copter) {
+  copter.emit(copter);
+  copter.state.gameOver(copter.player);
 };
