@@ -1,7 +1,7 @@
 var innerWidth = window.innerWidth;
 var innerHeight = window.innerHeight;
 var gameRatio = innerWidth / innerHeight;
-var game = new Phaser.Game(Math.ceil(800 * gameRatio), 800, Phaser.AUTO, 'gameContainer');
+var game = new Phaser.Game(Math.ceil(800 * gameRatio), 800, Phaser.WebGL, 'gameContainer');
 
 game.global = {};
 

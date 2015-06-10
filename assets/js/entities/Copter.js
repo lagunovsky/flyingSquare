@@ -1,13 +1,16 @@
 Copter = function (state, player) {
   Phaser.Sprite.call(this, game, 200, game.height / 2, game.cache.getBitmapData(player));
-  game.physics.arcade.enableBody(this);
+
+  if(Game.Player == player){
+    game.physics.arcade.enableBody(this);
+    this.body.allowGravity = true;
+    this.body.width = 32;
+    this.body.height = 32;
+    this.body.gravity.y = 2;
+  }
 
   this.anchor.setTo(0.5, 0.5);
   this.state = state;
-  this.body.allowGravity = true;
-  this.body.width = 32;
-  this.body.height = 32;
-  this.body.gravity.y = 2;
   this.player = player;
 
   this.createEmitter(this);

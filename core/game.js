@@ -8,7 +8,8 @@ var game = {
   players: {
     count: -1
   },
-  updateTime: config.get("updateTime"),
+  //updateTime: config.get("updateTime"),
+  updateTime: 16,
   createEventLoop: function (cb) {
     debug('createEventLoop');
     this.eventLoopTimer = setInterval(function () {
@@ -77,9 +78,6 @@ var game = {
     if(flag){
       this.destroyEventLoop();
     }
-  },
-  isEnd: function(){
-    return game.players[id].end;
   },
   generateMap: function (height) {
     this.generateHeightTracers = height;

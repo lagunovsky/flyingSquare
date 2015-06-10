@@ -19,7 +19,7 @@ module.exports = function (http, game) {
         game.createEventLoop(
           function () {
             debug('res.getPosition');
-            io.emit('getPosition');
+            io.emit('getCondition');
           }
         );
         debug('res.start');
@@ -27,10 +27,10 @@ module.exports = function (http, game) {
       }
     });
 
-    socket.on('position', function (position) {
-      debug('req.position');
-      debug('res.position %o', position);
-      io.emit('position',position);
+    socket.on('condition', function (condition) {
+      debug('req.condition');
+      debug('res.condition %o', condition);
+      io.emit('condition',condition);
     });
 
     socket.on('started', function () {

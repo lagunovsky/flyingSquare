@@ -42,6 +42,15 @@ Game.Play = {
       }
     }
   },
+  updateCopters: function (condition) {
+    if (condition.id != Game.Player) {
+      //console.log('!updateCopters',condition);
+        this.heroes[condition.id].position.y = condition.pos;
+        //this.heroes[condition.id].update();
+        console.log(this.heroes[condition.id].position.y);
+        //this.heroes[condition.id].angle = condition.angle;
+    }
+  },
   startGame: function () {
     if (!this.hasStarted) {
       this.hasStarted = true;
@@ -52,7 +61,7 @@ Game.Play = {
     this.blockSets = [];
     this.blockSets.push(new Game.Blocks(this));
   },
-  createScope: function(){
+  createScope: function () {
     this.scoreStyle = {font: '40px Squada One', fill: '#fff', align: 'center'};
     this.textScore = game.add.text(game.width / 2, game.height / 2 - 320, 'SCORE: 0', this.scoreStyle);
     this.textScore.anchor.set(0.5, 0.5);
@@ -67,7 +76,7 @@ Game.Play = {
       this.textBest.anchor.set(0.5, 0.5);
     }
   },
-  createCopters: function(){
+  createCopters: function () {
     var copters = {};
     this.heroes = {};
     for (var player in Game.Players) {
