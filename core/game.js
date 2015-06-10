@@ -20,10 +20,10 @@ var game = {
     clearInterval(this.eventLoopTimer);
   },
   addPlayer: function (id) {
-    game.players.count++;
-    if (game.players.count < 4) {
+    if (game.players.count < 3) {
+      game.players.count++;
       game.players[id] = {
-        color: game.getPlayerColor(),
+        color: game.getColor(),
         start: false
       };
       debug('add %s; players: %o', id, game.players);
@@ -35,12 +35,15 @@ var game = {
   },
   delPlayer: function (id) {
     game.players.count--;
-    game.colors.push(game.players[id].color);
+    this.addColor(game.players[id].color);
     delete(game.players[id]);
     debug('del %s; players: %o', id, game.players);
   },
-  getPlayerColor: function () {
+  getColor: function () {
     return game.colors.pop(game.colors.indexOf());
+  },
+  addColor: function (color) {
+    game.colors.push(color);
   },
   start: function (id) {
     game.players[id].start = true;
@@ -59,7 +62,8 @@ var game = {
   },
   started: function () {
     for (var player in game.players) {
-      game.players[player].start = false;
+      if(player != 'count')
+        game.players[player].start = false;
     }
   },
   playerEnd: function (id) {
