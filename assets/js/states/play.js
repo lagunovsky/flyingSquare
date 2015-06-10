@@ -2,38 +2,57 @@ Game.Play = {
   create: function () {
     Game.Socket.started();
 
-
-    var copter = this.add.bitmapData(32, 32);
-    copter.context.fillStyle = Game.Players[Game.Player].color;
-    copter.context.fillRect(0, 0, 32, 32);
-    this.cache.addBitmapData('hero', copter);
-
-
-
-
     this.tick = 0;
     this.gameMusic = this.add.audio('background-music', 0.5, true);
     this.explosion = this.add.audio('explosion', 1, false);
     this.keySpacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.keySpacebar.onDown.add(this.startGame, this);
-
-    this.readyToPlay = false;
     this.hasStarted = false;
     this.dead = false;
-
-    this.speed = -500;
+    this.speed = -250;
     this.speedInterval = 200;
-    this.speedGain = -50;
+    this.speedGain = -0;
     this.speedMin = -5000;
 
-    this.variance = 0;
-    this.varianceInterval = 200;
-    this.varianceGain = 5;
-    this.varianceMax = 150;
-
-    this.blockSize = 20;
-
     this.createBlockSets();
+    this.createScope();
+    this.createCopters();
+    this.startGame();
+  },
+  update: function () {
+    if (this.hasStarted) {
+      if (this.tick % this.speedInterval === 0 && !this.dead) {
+        if (this.speed > this.speedMin) {
+          this.speed += this.speedGain;
+        }
+      } else if (this.dead) {
+        this.speed *= 0.99;
+      }
+
+      this.blockSets.forEach(function (blockSet) {
+        blockSet.update();
+      });
+
+      this.textScore.setText('SCORE: ' + this.tick);
+      if (this.game.device.localStorage) {
+        this.textBest.setText('BEST: ' + Math.max(this.tick, this.bestScore));
+      }
+
+      if (!this.dead) {
+        this.tick++;
+      }
+    }
+  },
+  startGame: function () {
+    if (!this.hasStarted) {
+      this.hasStarted = true;
+      this.gameMusic.play();
+    }
+  },
+  createBlockSets: function () {
+    this.blockSets = [];
+    this.blockSets.push(new Game.Blocks(this));
+  },
+  createScope: function(){
     this.scoreStyle = {font: '40px Squada One', fill: '#fff', align: 'center'};
     this.textScore = game.add.text(game.width / 2, game.height / 2 - 320, 'SCORE: 0', this.scoreStyle);
     this.textScore.anchor.set(0.5, 0.5);
@@ -47,90 +66,29 @@ Game.Play = {
       this.textBest = game.add.text(game.width / 2, game.height / 2 + 340, 'BEST: ' + this.bestScore, this.scoreStyle);
       this.textBest.anchor.set(0.5, 0.5);
     }
-
-    this.readyToPlay = true;
-
-    this.emitterDark = game.add.emitter(0, 0, 1000);
-    this.emitterDark.makeParticles(game.cache.getBitmapData('square'));
-    this.emitterDark.minParticleScale = 0.1;
-    this.emitterDark.maxParticleScale = 0.5;
-    this.emitterDark.setYSpeed(-15, 15);
-    this.emitterDark.setXSpeed(-15, 15);
-    this.emitterDark.gravity = -10;
-
-    this.hero = new Game.Copter({}, this);
-
   },
-  update: function () {
-    var self = this;
-    if (this.hasStarted) {
-      if (this.tick % this.speedInterval === 0 && !this.dead) {
-        if (this.speed > this.speedMin) {
-          this.speed += this.speedGain;
-        }
-      } else if (this.dead) {
-        this.speed *= 0.99;
-      }
-
-      if (this.tick % this.varianceInterval === 0) {
-        if (this.variance < this.varianceMax) {
-          this.variance += this.varianceGain;
-          this.blockSets[0].tracer.yVariance = this.variance;
-          this.blockSets[0].tracer.hVariance = this.variance;
-        }
-      }
-
-      this.blockSets.forEach(function (blockSet) {
-        blockSet.update();
-      });
-
-      this.textScore.setText('SCORE: ' + this.tick);
-      if (this.game.device.localStorage) {
-        this.textBest.setText('BEST: ' + Math.max(this.tick, this.bestScore));
-      }
-
-      self.emitterDark.forEachAlive(function (p) {
-        p.alpha = p.lifespan / self.emitterDark.lifespan;
-      });
-
-      if (!this.dead) {
-        this.tick++;
+  createCopters: function(){
+    var copters = {};
+    this.heroes = {};
+    for (var player in Game.Players) {
+      if (player != 'count') {
+        copters[player] = this.add.bitmapData(32, 32);
+        copters[player].context.fillStyle = Game.Players[player].color;
+        copters[player].context.fillRect(0, 0, 32, 32);
+        this.cache.addBitmapData(player, copters[player]);
+        this.heroes[player] = new Copter(this, player);
       }
     }
-
   },
-  shutdown: function () {
-    this.blockSets[0].blockGroup.destroy();
-    this.blockSets[0].blockGroup = null;
-    this.blockSets.length = 0;
-    this.blockSets = null;
-
-    this.hero.destroy();
-    this.hero = null;
-  },
-  startGame: function () {
-    if (!this.hasStarted && this.readyToPlay) {
-      this.hasStarted = true;
-      this.gameMusic.play();
-      this.hero.body.allowGravity = true;
-    }
-  },
-  createBlockSets: function () {
-    this.blockSets = [];
-    var blockSize = 20;
-    this.blockSets.push(new Game.Blocks({}, this));
-  },
-  gameover: function () {
-    var self = this;
-    if (!this.dead) {
+  gameOver: function (player) {
+    this.explosion.play();
+    if (Game.Player == player) {
       this.dead = true;
-      this.explosion.play();
       this.gameMusic.stop();
       if (this.tick > this.bestScore) {
         localStorage.bestScoreCurvy = this.tick;
       }
-
-      game.time.events.add(Phaser.Timer.SECOND * 1.5, function () {
+      game.time.events.add(Phaser.Timer.SECOND, function () {
         game.state.start('Gameover');
       }, self);
     }
