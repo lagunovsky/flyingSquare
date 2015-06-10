@@ -3,7 +3,8 @@ var config = require("nconf").argv().file({file: 'config.json'});
 var
   app = require('./core/express'),
   server = require('http').createServer(app),
-  socket = require('./core/socket')(server),
+  game = require('./core/game'),
+  gameManager = require('./core/gameManager')(server,game),
   debug = require('debug')('http');
 port = config.get("app:port") || 3000;
 

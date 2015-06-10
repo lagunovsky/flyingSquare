@@ -8,6 +8,10 @@ var game = {
   players: {
     count: -1
   },
+  updateTime:config.get("updateTime"),
+  eventLoop: function(){
+
+  },
   addPlayer: function (id) {
     game.players.count++;
     if (game.players.count < 4) {
@@ -49,9 +53,6 @@ var game = {
     for (var player in game.players) {
       game.players[player].start = false;
     }
-  },
-  restart: function () {
-
   },
   generateMap: function (height) {
     this.generateHeightTracers = height;
@@ -129,7 +130,7 @@ var game = {
   randomInteger: function (min, max) {
     min = min * 1000;
     max = max * 1000;
-    var rand = min - 0.5 + Math.random() * (max - min + 1)
+    var rand = min - 0.5 + Math.random() * (max - min + 1);
     rand = Math.round(rand);
     return rand / 1000;
   }
