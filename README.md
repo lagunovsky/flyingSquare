@@ -1,5 +1,5 @@
 # FlyingSquare
-Multiplayer runner game. 
+Multiplayer arcade (scroller) game. 
 Created with ❤, NodeJS, Gulp and Phaser.
 
 Start game server
