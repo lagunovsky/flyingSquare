@@ -1,6 +1,6 @@
 # FlyingSquare
 Multiplayer arcade (scroller) game. 
-Created with ❤, NodeJS, Gulp and Phaser.
+Created with ❤, NodeJS, Socket.io, Gulp and Phaser.
 
 Start game server
 ```sh
