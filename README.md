@@ -1,4 +1,7 @@
 # FlyingSquare
+
+Course work in the third year of study in BSUIR.
+
 Multiplayer arcade (scroller) game. 
 Created with ❤, NodeJS, Socket.io, Gulp and Phaser.
 
